@@ -1,6 +1,7 @@
 from pydantic_settings import BaseSettings, SettingsConfigDict
 from urllib.parse import quote_plus
 
+
 class Settings(BaseSettings):
     SECRET_KEY: str
     API_KEY: str
@@ -9,6 +10,7 @@ class Settings(BaseSettings):
     DB_HOST: str
     DB_PORT: str
     DB_NAME: str
+    ALGORITHM: str = "HS256"
 
     @property
     def DATABASE_URL(self) -> str:
@@ -16,4 +18,6 @@ class Settings(BaseSettings):
         return f"postgresql://{self.DB_USER}:{pw}@{self.DB_HOST}:{self.DB_PORT}/{self.DB_NAME}"
 
     model_config = SettingsConfigDict(env_file=".env", extra="ignore")
+
+
 settings = Settings()
