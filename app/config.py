@@ -11,6 +11,29 @@ class Settings(BaseSettings):
     DB_PORT: str
     DB_NAME: str
     ALGORITHM: str = "HS256"
+    BANNED: set[str] = {
+        "null",
+        "none",
+        "true",
+        "false",
+        "undefined",
+        "object",
+        "array",
+        "select",
+        "insert",
+        "update",
+        "delete",
+        "drop",
+        "union",
+        "script",
+        "test",
+        "asd",
+        "asdf",
+        "qwerty",
+        "foo",
+        "bar",
+        "baz",
+    }
 
     @property
     def DATABASE_URL(self) -> str:

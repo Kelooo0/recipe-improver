@@ -35,7 +35,7 @@ class SearchModel(Base):
     __tablename__ = "searches"
 
     id = Column(Integer, primary_key=True, index=True)
-    ingredients = Column(String(100), nullable=False)
+    ingredients = Column(String(1000), nullable=False)
     created_at = Column(DateTime, server_default=func.now())
 
     user_id = Column(Integer, ForeignKey("users.id"), nullable=False)

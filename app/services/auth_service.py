@@ -1,14 +1,18 @@
-from fastapi import HTTPException, status
-from app.schemas import User, UserCreate
+from fastapi import HTTPException, status, Depends
+from app.schemas import User, UserCreate, TokenData
 from app.models import UserModel
 from sqlalchemy.orm import Session
 import bcrypt
 from datetime import datetime, timezone, timedelta
 import jwt
 from app.config import settings
+from fastapi.security import OAuth2PasswordBearer
+from sqlalchemy.orm import Session
+from app.database import get_db
 
 SECRET_KEY = settings.SECRET_KEY
 ALGORITHM = settings.ALGORITHM
+oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/auth/login")
 
 
 class AuthService:
@@ -58,6 +62,26 @@ class AuthService:
         expire = datetime.now(timezone.utc) + timedelta(minutes=30)
         to_encode.update({"exp": expire})
         return jwt.encode(to_encode, SECRET_KEY, algorithm=ALGORITHM)
+
+
+def get_current_user(
+    db: Session = Depends(get_db), token: str = Depends(oauth2_scheme)
+) -> UserModel:
+    credentials_exception = HTTPException(
+        status_code=status.HTTP_401_UNAUTHORIZED,
+        detail="Credentials error",
+        headers={"WWW-Authentication": "Bearer"},
+    )
+    try:
+        payload = jwt.decode(token, SECRET_KEY, algorithms=ALGORITHM)
+        email: str = payload.get("sub")
+        token_data = TokenData(email=email)
+    except jwt.PyJWTError:
+        raise credentials_exception
+    user = db.query(UserModel).filter(UserModel.email == token_data.email).first()
+    if user is None:
+        raise credentials_exception
+    return user
 
 
 auth_service = AuthService()
