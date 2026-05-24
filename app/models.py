@@ -25,7 +25,7 @@ class RecipeModel(Base):
     created_at = Column(DateTime, server_default=func.now())
 
     user_id = Column(Integer, ForeignKey("users.id"), nullable=False)
-    search_id = Column(Integer, ForeignKey("searches.id"), nullable=False)
+    search_id = Column(Integer, ForeignKey("searches.id"), nullable=True)
 
     owner = relationship("UserModel", back_populates="recipes")
     search = relationship("SearchModel", back_populates="search_recipes")
