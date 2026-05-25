@@ -55,7 +55,7 @@ def update_recipe(
     current_user: UserModel = Depends(get_current_user),
     db: Session = Depends(get_db),
 ) -> Recipe:
-    return update_recipe_service(update_data, recipe, current_user, db)
+    return update_recipe_service(update_data, recipe, db)
 
 
 @router.delete("/{id}", status_code=status.HTTP_204_NO_CONTENT)

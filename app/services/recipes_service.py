@@ -23,12 +23,14 @@ def create_recipe_service(
 
 
 def update_recipe_service(
-    update_data: RecipeUpdate, recipe: RecipeModel, current_user: UserModel, db: Session
+    update_data: RecipeUpdate, recipe: RecipeModel, db: Session
 ) -> RecipeModel:
     update_dict = update_data.model_dump(exclude_unset=True)
 
     for key, value in update_dict.items():
         setattr(recipe, key, value)
+
+    db.commit()
 
     return recipe
 
