@@ -38,6 +38,12 @@ def get_recipes(
 ) -> list[Recipe]:
     return get_recipes_service(current_user, db)
 
+@router.get("/{id}")
+def get_recipe(
+    recipe: RecipeModel = Depends(validate_recipe), current_user: UserModel = Depends(get_current_user), db: Session = Depends(get_db)
+) -> Recipe:
+    return recipe
+
 
 @router.post("/", status_code=status.HTTP_201_CREATED)
 def create_recipe(
