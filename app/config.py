@@ -34,6 +34,7 @@ class Settings(BaseSettings):
         "bar",
         "baz",
     }
+    TEST_DATABASE_URL: str = "sqlite:///:memory:"
 
     @property
     def DATABASE_URL(self) -> str:

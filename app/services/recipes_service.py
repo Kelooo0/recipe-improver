@@ -6,6 +6,7 @@ from app.schemas import RecipeCreate, RecipeUpdate
 def get_recipes_service(current_user: UserModel, db: Session) -> list[RecipeModel]:
     return db.query(RecipeModel).filter(RecipeModel.user_id == current_user.id).all()
 
+
 def create_recipe_service(
     recipe_data: RecipeCreate, current_user: UserModel, db: Session
 ) -> RecipeModel:
