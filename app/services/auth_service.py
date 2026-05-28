@@ -1,5 +1,5 @@
 from fastapi import HTTPException, status, Depends
-from app.schemas import User, UserCreate, TokenData
+from app.schemas import UserCreate, TokenData
 from app.models import UserModel
 from sqlalchemy.orm import Session
 import bcrypt
